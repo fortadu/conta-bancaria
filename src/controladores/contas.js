@@ -23,23 +23,16 @@ const criar = (req, res) => {
         return primeiraLetra.toUpperCase() + outrasLetras
     }
 
-    if (!nome) {
-        return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(nomeString)} não informado(a)` })
-    } else if (!cpf) {
-        return res.status(404).json({ mensagem: `${cpfString} não informado` })
-    } else if (!data_nascimento) {
-        return res.status(404).json({ mensagem: `Data de nascimento não informada` })
-    } else if (!telefone) {
-        return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(telefoneString)} não informado` })
-    } else if (!email) {
-        return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(emailString)} não informado` })
-    } else if (!senha) {
-        return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(senhaString)} não informada` })
-    }
+    if (!nome) { return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(nomeString)} não informado(a)` }) }
+    if (!cpf) { return res.status(404).json({ mensagem: `${cpfString} não informado` }) }
+    if (!data_nascimento) { return res.status(404).json({ mensagem: `Data de nascimento não informada` }) }
+    if (!telefone) { return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(telefoneString)} não informado` }) }
+    if (!email) { return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(emailString)} não informado` }) }
+    if (!senha) { return res.status(404).json({ mensagem: `${primeiraLetraMaiuscula(senhaString)} não informada` }) }
 
     if (bancoDeDados.contas.some(conta => { return conta.usuario.cpf === cpf })) {
         return res.status(400).json({ mensagem: 'CPF já cadastrado' })
-    } else if (bancoDeDados.contas.some(conta => { return conta.usuario.email === email })) {
+    } if (bancoDeDados.contas.some(conta => { return conta.usuario.email === email })) {
         return res.status(400).json({ mensagem: 'Email já cadastrado' })
     }
 
@@ -117,8 +110,6 @@ const depositar = (req, res) => {
         ...req.body
     })
 
-    console.log(bancoDeDados.depositos)
-
     return res.json({ mensagem: 'Depósito realizado com sucesso' })
 }
 
@@ -177,11 +168,11 @@ const consultar = (req, res) => {
     const { numero_conta, senha } = req.query
 
     if (!numero_conta) { return res.status(404).json({ mensagem: 'Número da conta não informado' }) }
-    if (!senha) { return res.status(404).json({ mensagem: 'Senha não informada' }) }
+    if (!senha) { return res.status(404).json({ mensagem: 'Senha da conta não informada' }) }
 
     const contaProcurada = bancoDeDados.contas.find(conta => { return conta.numero === numero_conta })
     if (!contaProcurada) { return res.status(404).json({ mensagem: `Não há conta de número ${numero_conta}` }) }
-    if (contaProcurada.usuario.senha !== senha) { return res.status(400).json({ mensagem: 'Senha incorreta' }) }
+    if (contaProcurada.usuario.senha !== senha) { return res.status(400).json({ mensagem: 'Senha da conta incorreta' }) }
 
     return res.json({ saldo: contaProcurada.saldo })
 }

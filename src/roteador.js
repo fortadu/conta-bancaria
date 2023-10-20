@@ -2,6 +2,9 @@ const express = require('express')
 const contas = require('./controladores/contas')
 const roteador = express()
 
+const { validarSenha } = require('./intermediarios')
+roteador.use(validarSenha)
+
 roteador.get('/contas', contas.listar)
 roteador.post('/contas', contas.criar)
 roteador.put('/contas/:numeroConta/usuario', contas.atualizar)
